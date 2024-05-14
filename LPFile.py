@@ -79,18 +79,31 @@ class LPFile:
                 comingEdges = self.graph.getComingEdgeToNode(destination)
                 exitingEdges = self.graph.getExitingEdgeToNode(destination)
 
-                comingEdgesSum = ""
+                destination_add_list = []
                 for comingEdge in comingEdges:
-                    comingEdgesSum += f"quantity_e_{comingEdge.start}_{comingEdge.end}_{i} + "
+                    destination_add_list.append(f"quantity_e_{comingEdge.start}_{comingEdge.end}_{i}")
+
+                destination_remove_list = []
+                for exitingEdge in exitingEdges:
+                    destination_remove_list.append(f"quantity_e_{exitingEdge.start}_{exitingEdge.end}_{i}")
+
+                for remove in destination_remove_list:
+                    if remove in destination_add_list:
+                        destination_add_list.remove(remove)
+                        destination_remove_list.remove(remove)
+
+                comingEdgesSum = ""
+                for add in destination_add_list:
+                    comingEdgesSum += add + " + "
                 comingEdgesSum = self.removingLastCharacter(comingEdgesSum)
 
                 exitingEdgesSum = ""
                 firstime = True
-                for exitingEdge in exitingEdges:
+                for remove in destination_remove_list:
                     if firstime:
                         exitingEdgesSum += "- "
                         firstime = False
-                    exitingEdgesSum += f"quantity_e_{exitingEdge.start}_{exitingEdge.end}_{i} - "
+                    exitingEdgesSum += remove + " - "
                 exitingEdgesSum = self.removingLastCharacter(exitingEdgesSum)
 
                 temp.append("{contraite}: {sum1} {sum2} = {value}".format(contraite=f"contraite_{destination.id}_{i}", sum1=comingEdgesSum, sum2=exitingEdgesSum, value=self.dictionnaire[f"const_d_{destination.id}_{i}"]))
@@ -104,20 +117,32 @@ class LPFile:
                 comingEdges = self.graph.getComingEdgeToNode(source)
                 exitingEdges = self.graph.getExitingEdgeToNode(source)
 
-                comingEdgesSum = ""
-                firstime = True
+                destination_add_list = []
                 for comingEdge in comingEdges:
+                    destination_add_list.append(f"quantity_e_{comingEdge.start}_{comingEdge.end}_{i}")
+
+                destination_remove_list = []
+                firstime = True
+                for exitingEdge in exitingEdges:
+                    destination_remove_list.append(f"quantity_e_{exitingEdge.start}_{exitingEdge.end}_{i}")
+
+                for remove in destination_remove_list:
+                    if remove in destination_add_list:
+                        destination_add_list.remove(remove)
+                        destination_remove_list.remove(remove)
+
+                comingEdgesSum = ""
+                for add in destination_add_list:
                     if firstime:
                         comingEdgesSum += "- "
                         firstime = False
-                    comingEdgesSum += f"quantity_e_{comingEdge.start}_{comingEdge.end}_{i} - "
+                    comingEdgesSum += add + " - "
                 comingEdgesSum = self.removingLastCharacter(comingEdgesSum)
 
                 exitingEdgesSum = ""
-                for exitingEdge in exitingEdges:
-                    exitingEdgesSum += f"quantity_e_{exitingEdge.start}_{exitingEdge.end}_{i} + "
+                for remove in destination_remove_list:
+                    exitingEdgesSum += remove + " + "
                 exitingEdgesSum = self.removingLastCharacter(exitingEdgesSum)
-
 
                 temp.append("{contraite}: {sum1} {sum2} <= {value}".format(contraite=f"contraite_{source.id}_{i}", sum1=exitingEdgesSum, sum2=comingEdgesSum, value=self.dictionnaire[f"const_s_{source.id}_{i}"]))
 
@@ -130,23 +155,37 @@ class LPFile:
                 comingEdges = self.graph.getComingEdgeToNode(node)
                 exitingEdges = self.graph.getExitingEdgeToNode(node)
 
-                comingEdgesSum = ""
+                destination_add_list = []
                 for comingEdge in comingEdges:
-                    comingEdgesSum += f"quantity_e_{comingEdge.start}_{comingEdge.end}_{i} + "
+                    destination_add_list.append(f"quantity_e_{comingEdge.start}_{comingEdge.end}_{i}")
+
+                destination_remove_list = []
+                for exitingEdge in exitingEdges:
+                    destination_remove_list.append(f"quantity_e_{exitingEdge.start}_{exitingEdge.end}_{i}")
+
+                for remove in destination_remove_list:
+                    if remove in destination_add_list:
+                        destination_add_list.remove(remove)
+                        destination_remove_list.remove(remove)
+
+                comingEdgesSum = ""
+                for add in destination_add_list:
+                    comingEdgesSum += add + " + "
                 comingEdgesSum = self.removingLastCharacter(comingEdgesSum)
 
                 exitingEdgesSum = ""
                 firstime = True
-                for exitingEdge in exitingEdges:
+                for remove in destination_remove_list:
                     if firstime:
                         exitingEdgesSum += "- "
                         firstime = False
-                    exitingEdgesSum += f"quantity_e_{exitingEdge.start}_{exitingEdge.end}_{i} - "
+                    exitingEdgesSum += remove + " - "
                 exitingEdgesSum = self.removingLastCharacter(exitingEdgesSum)
-
                 temp.append("{contraite}: {sum1} {sum2} = 0".format(contraite=f"contraite_{node.id}_{i}",
-                                                                               sum1=comingEdgesSum,
-                                                                               sum2=exitingEdgesSum))
+                                                                    sum1=comingEdgesSum,
+                                                                    sum2=exitingEdgesSum))
+
+
 
         return temp
     def removingLastCharacter(self, string:str):
