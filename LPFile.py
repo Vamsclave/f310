@@ -34,7 +34,7 @@ class LPFile:
         """
         for i in range(self.graph.itemNumber):
             for edge in self.graph.edgeList:
-                self.dictionnaire[f"const_e_{edge.start}_{edge.end}_{i}"] = edge.getCost(i)
+                self.dictionnaire[f"const_e_{edge.id}_{i}"] = edge.getCost(i)
         """
         pour tout source
         definir la capacite pour chaque produit
@@ -56,7 +56,7 @@ class LPFile:
         temp = list()
         for i in range(self.graph.itemNumber):
             for edge in self.graph.edgeList:
-                temp.append(f"quantity_e_{edge.start}_{edge.end}_{i}")
+                temp.append(f"quantity_e_{edge.id}_{i}")
         return temp
     def getoptimalCondition(self) -> str:
         """
@@ -65,8 +65,8 @@ class LPFile:
         temp = "z: "
         for i in range(self.graph.itemNumber):
             for edge in self.graph.edgeList:
-                a = self.dictionnaire[f"const_e_{edge.start}_{edge.end}_{i}"]
-                temp += f"{a} quantity_e_{edge.start}_{edge.end}_{i} + "
+                a = self.dictionnaire[f"const_e_{edge.id}_{i}"]
+                temp += f"{a} quantity_e_{edge.id}_{i} + "
         temp = self.removingLastCharacter(temp) # removing the + added at the end
         return temp
 
@@ -84,11 +84,11 @@ class LPFile:
 
                 destination_add_list = []
                 for comingEdge in comingEdges:
-                    destination_add_list.append(f"quantity_e_{comingEdge.start}_{comingEdge.end}_{i}")
+                    destination_add_list.append(f"quantity_e_{comingEdge.id}_{i}")
 
                 destination_remove_list = []
                 for exitingEdge in exitingEdges:
-                    destination_remove_list.append(f"quantity_e_{exitingEdge.start}_{exitingEdge.end}_{i}")
+                    destination_remove_list.append(f"quantity_e_{exitingEdge.id}_{i}")
 
                 for remove in destination_remove_list:
                     if remove in destination_add_list:
@@ -122,12 +122,12 @@ class LPFile:
 
                 destination_add_list = []
                 for comingEdge in comingEdges:
-                    destination_add_list.append(f"quantity_e_{comingEdge.start}_{comingEdge.end}_{i}")
+                    destination_add_list.append(f"quantity_e_{comingEdge.id}_{i}")
 
                 destination_remove_list = []
                 firstime = True
                 for exitingEdge in exitingEdges:
-                    destination_remove_list.append(f"quantity_e_{exitingEdge.start}_{exitingEdge.end}_{i}")
+                    destination_remove_list.append(f"quantity_e_{exitingEdge.id}_{i}")
 
                 for remove in destination_remove_list:
                     if remove in destination_add_list:
@@ -160,11 +160,11 @@ class LPFile:
 
                 destination_add_list = []
                 for comingEdge in comingEdges:
-                    destination_add_list.append(f"quantity_e_{comingEdge.start}_{comingEdge.end}_{i}")
+                    destination_add_list.append(f"quantity_e_{comingEdge.id}_{i}")
 
                 destination_remove_list = []
                 for exitingEdge in exitingEdges:
-                    destination_remove_list.append(f"quantity_e_{exitingEdge.start}_{exitingEdge.end}_{i}")
+                    destination_remove_list.append(f"quantity_e_{exitingEdge.id}_{i}")
 
                 for remove in destination_remove_list:
                     if remove in destination_add_list:
