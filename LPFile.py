@@ -66,7 +66,11 @@ class LPFile:
         for i in range(self.graph.itemNumber):
             for edge in self.graph.edgeList:
                 a = self.dictionnaire[f"const_e_{edge.id}_{i}"]
-                temp += f"{a} quantity_e_{edge.id}_{i} + "
+                if a < 0:
+                    temp = self.removingLastCharacter(temp)
+                    temp += f" - {abs(a)} quantity_e_{edge.id}_{i} + "
+                else:
+                    temp += f"{a} quantity_e_{edge.id}_{i} + "
         temp = self.removingLastCharacter(temp) # removing the + added at the end
         return temp
 
