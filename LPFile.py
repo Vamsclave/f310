@@ -14,6 +14,9 @@ class LPFile:
             file.write(f"Subject to\n")
             for declaration in conditionDeclarationList:
                 file.write(f"   {declaration}\n")
+            file.write(f"Bounds\n")
+            for declaration in variableDeclarationList:
+                file.write(f"   {declaration} >= 0\n")
             file.write(f"Integer\n")
             for declaration in variableDeclarationList:
                 file.write(f"   {declaration}\n")
